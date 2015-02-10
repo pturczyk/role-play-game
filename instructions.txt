@@ -1,0 +1,13 @@
+
+Prerequisites
+- JDK 1.8
+- Maven 3.x
+
+Build instructions: 
+- ensure JAVA_HOME is set to JDK 1.8
+- run: maven package
+
+Run instructions:
+- ensure java 1.8 is in PATH
+- run: java -jar target/rpg-1.0-SNAPSHOT-jar-with-dependencies.jar 
+
