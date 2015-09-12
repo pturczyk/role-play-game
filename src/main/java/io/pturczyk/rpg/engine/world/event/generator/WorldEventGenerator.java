@@ -9,7 +9,7 @@ public interface WorldEventGenerator {
 	/**
 	 * Generates a new world event
 	 * 
-	 * @return produced {@link WorlkdEvent}
+	 * @return produced {@link WorldEvent}
 	 */
 	WorldEvent generate();
 }

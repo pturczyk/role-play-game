@@ -12,6 +12,5 @@ public interface EnemyFactory {
 	/**
 	 * Creates an enemy instance
 	 */
-	public abstract EnemyCharacter createEnemy();
-
+	EnemyCharacter createEnemy();
 }

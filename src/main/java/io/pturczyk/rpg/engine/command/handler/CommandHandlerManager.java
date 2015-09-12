@@ -41,7 +41,7 @@ public class CommandHandlerManager {
 	private void addHandlers(List<CommandHandler> handlers) {
 		cmdHandlerMap = handlers.stream().collect(
 				toMap(CommandHandler::getAction, 
-					  Function.<CommandHandler> identity(), 
+					  Function.identity(),
 					  (u,v) -> { throw new IllegalStateException(String.format("Action name not unique %s", u)); },
 					  TreeMap::new)
 				);

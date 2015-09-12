@@ -10,17 +10,16 @@ import io.pturczyk.rpg.util.IOUtils;
  * 
  * @author Pawel Turczyk (pturczyk@gmail.com)
  */
-public class EmptyWorldLocationEventHandler extends WorldEventHandler {
+public class EmptyWorldLocationEventHandler extends WorldEventHandler<EmptyWorldLocationEvent> {
 
 	private final IOUtils io;
 
 	public EmptyWorldLocationEventHandler(IOUtils io) {
-		super(EmptyWorldLocationEvent.class);
 		this.io = io;
 	}
 	
 	@Override
-	public void handleEvent(WorldEvent event, GameContext context) {
+	public void handleEvent(EmptyWorldLocationEvent event, GameContext context) {
 		io.say("Hmm.. nothing interesting here\n");
 		context.getWorld().discardPlayerCharacterEnemy();
 	}

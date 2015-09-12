@@ -32,7 +32,7 @@ public class MapHandler extends CommandHandler {
 	private final IOUtils io;
 
 	static {
-		eventToMapSymbol = new HashMap<Class<? extends WorldEvent>, Character>();
+		eventToMapSymbol = new HashMap<>();
 		eventToMapSymbol.put(EmptyWorldLocationEvent.class, DISCOVERED);
 		eventToMapSymbol.put(EnemyEncounterWorldEvent.class, ENEMY);
 	}
