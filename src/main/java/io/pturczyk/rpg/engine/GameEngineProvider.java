@@ -23,79 +23,74 @@ import java.util.Arrays;
 
 /**
  * Builds and injects all elements required by GameEngine.
- * 
+ * <p>
  * TODO: Replace this with DI framework injectors when possible
- * 
+ *
  * @author Pawel Turczyk (pturczyk@gmail.com)
  */
 public class GameEngineProvider {
-	
-	private static final String GAME_SAVE_PATH = "rpg.save";
-	private final IOUtils io = new IOUtils();
-	private final RandomGenerator randomNumberGenerator = new RandomGenerator();
-	
-	/**
-	 * Creates a new {@link GameEngine} instance.
-	 * 
-	 * @return new {@link GameEngine} instance
-	 */
-	public GameEngine get() {
-		GameContext context = getGameContext();
-		GameWorldProvider worldBuilder = createGameWorldBuilder(context);
-		CommandInput cmdInput = createCmdInput(context);
-		CommandHandlerManager cmdHandlerManager = createHandlerManager(context);
-		WorldEventHandlerManager eventHandlerManager = createEventHandlerManager(context);
-		return new GameEngine(cmdInput, cmdHandlerManager, eventHandlerManager, worldBuilder, context);
-	}
 
-	private GameWorldProvider createGameWorldBuilder(GameContext context) {
-		return new GameWorldProvider(
-				io, 
-				new FileGameWorldRepository(GAME_SAVE_PATH), 
-				new RandomWorldEventGenerator(randomNumberGenerator, new RandomEnemyFactory(randomNumberGenerator), context)  
-			);
-	}
+    private static final String GAME_SAVE_PATH = "rpg.save";
+    private final IOUtils io = new IOUtils();
+    private final RandomGenerator randomNumberGenerator = new RandomGenerator();
 
-	private GameContext getGameContext() {
-		GameContext context = new GameContext();
-		context.setOngoing(true);
-		return context;
-	}
+    /**
+     * Creates a new {@link GameEngine} instance.
+     *
+     * @return new {@link GameEngine} instance
+     */
+    public GameEngine get() {
+        GameContext context = getGameContext();
+        GameWorldProvider worldBuilder = createGameWorldBuilder(context);
+        CommandInput cmdInput = createCmdInput(context);
+        CommandHandlerManager cmdHandlerManager = createHandlerManager(context);
+        WorldEventHandlerManager eventHandlerManager = createEventHandlerManager(context);
+        return new GameEngine(cmdInput, cmdHandlerManager, eventHandlerManager, worldBuilder, context);
+    }
 
-	private CommandInput createCmdInput(GameContext context) {
-		return () -> {
-			return Command.from(
-					io.ask("So, what should %s do now? ", 
-							context.getWorld().getPlayerCharacter().getName())
-				);
-		};
-	}
-	
-	private CommandHandlerManager createHandlerManager(GameContext gameContext) {
-		// Add new command handlers here
-		ExploreHandler exploreHandler = new ExploreHandler(io);
-		FleeHandler fleeHandler = new FleeHandler(io, randomNumberGenerator);
-		ExitHandler exitHandler = new ExitHandler(io, new FileGameWorldRepository(GAME_SAVE_PATH));
-		AttackHandler attackHandler = new AttackHandler(io, randomNumberGenerator);
-		StatusHandler statusHander = new StatusHandler(io);
-		MapHandler mapHandler = new MapHandler(io);
-		
-		return new CommandHandlerManager(
-				io,
-				gameContext,
-				Arrays.asList(exploreHandler, exitHandler, fleeHandler, attackHandler, statusHander, mapHandler)
-			);
-	}
-	
-	private WorldEventHandlerManager createEventHandlerManager(GameContext gameContext) {
-		// Add new world event handlers here
-		EmptyWorldLocationEventHandler emptyLocationHandler = new EmptyWorldLocationEventHandler(io);
-		EnemyEncounterWorldEventHandler enemyEncounterHandler = new EnemyEncounterWorldEventHandler(io, randomNumberGenerator);
-		
-		return new WorldEventHandlerManager(
-				gameContext, 
-				Arrays.asList(emptyLocationHandler, enemyEncounterHandler)
-			);
-	}
-	
+    private GameWorldProvider createGameWorldBuilder(GameContext context) {
+        return new GameWorldProvider(
+                io,
+                new FileGameWorldRepository(GAME_SAVE_PATH),
+                new RandomWorldEventGenerator(randomNumberGenerator, new RandomEnemyFactory(randomNumberGenerator), context)
+        );
+    }
+
+    private GameContext getGameContext() {
+        GameContext context = new GameContext();
+        context.setOngoing(true);
+        return context;
+    }
+
+    private CommandInput createCmdInput(GameContext context) {
+        return () -> Command.from(io.ask("So, what should %s do now? ", context.getWorld().getPlayerCharacter().getName()));
+    }
+
+    private CommandHandlerManager createHandlerManager(GameContext gameContext) {
+        // Add new command handlers here
+        ExploreHandler exploreHandler = new ExploreHandler(io);
+        FleeHandler fleeHandler = new FleeHandler(io, randomNumberGenerator);
+        ExitHandler exitHandler = new ExitHandler(io, new FileGameWorldRepository(GAME_SAVE_PATH));
+        AttackHandler attackHandler = new AttackHandler(io, randomNumberGenerator);
+        StatusHandler statusHander = new StatusHandler(io);
+        MapHandler mapHandler = new MapHandler(io);
+
+        return new CommandHandlerManager(
+                io,
+                gameContext,
+                Arrays.asList(exploreHandler, exitHandler, fleeHandler, attackHandler, statusHander, mapHandler)
+        );
+    }
+
+    private WorldEventHandlerManager createEventHandlerManager(GameContext gameContext) {
+        // Add new world event handlers here
+        EmptyWorldLocationEventHandler emptyLocationHandler = new EmptyWorldLocationEventHandler(io);
+        EnemyEncounterWorldEventHandler enemyEncounterHandler = new EnemyEncounterWorldEventHandler(io, randomNumberGenerator);
+
+        return new WorldEventHandlerManager(
+                gameContext,
+                Arrays.asList(emptyLocationHandler, enemyEncounterHandler)
+        );
+    }
+
 }
