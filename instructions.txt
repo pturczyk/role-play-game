@@ -11,3 +11,4 @@ Run instructions:
 - ensure java 1.8 is in PATH
 - run: java -jar target/rpg-1.0-SNAPSHOT-jar-with-dependencies.jar 
 
+ 🟩 🟥 🟧 
